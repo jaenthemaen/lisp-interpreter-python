@@ -1,0 +1,283 @@
+# $Header$
+#
+# automagically generated from the projectDefinition: cg_hdm_scheme2013.
+#
+# -------------- no need to change anything below ----------
+#
+# This makefile generates some standalone demo applications
+#
+#    make
+#       generates scheme2013
+#
+
+TOP=../../../stx
+INCLUDE_TOP=$(TOP)/..
+
+# set to a dummy file name (like FORCE=@@@FORCE-BUILD@@@) to force the build of prereq packages
+FORCE=
+.PHONY: $(FORCE)
+
+PACKAGE=cg:hdm/scheme2013
+SUBDIRS=
+SUPPRESS_LOCAL_ABBREVS="yes"
+NOAUTOLOAD=1
+NOSUBAUTOLOAD=1
+
+LOCALINCLUDES= -I$(INCLUDE_TOP)/stx/goodies/sunit -I$(INCLUDE_TOP)/stx/libbasic
+LOCALDEFINES=
+GLOBALDEFINES=
+MAIN_DEFINES=-DIGNORE_IMAGE -DNO_DISPLAY
+
+RCSSOURCES=Make.proto *.st
+LINKSOURCES=Make.proto *.st
+
+DELIVERBINARIES=
+
+LIBNAME=libcg_hdm_scheme2013
+STCLOCALOPT='-package=$(PACKAGE)' -I. -headerDir=. $(LOCALINCLUDES) $(STCLOCALOPTIMIZATIONS) $(STCWARNINGS) $(LOCALDEFINES) -headerDir=.  -varPrefix=$(LIBNAME)
+
+
+# ********** OPTIONAL: MODIFY the next line ***
+# additional C-libraries that should be pre-linked with the class-objects
+LD_OBJ_LIBS=
+LOCAL_SHARED_LIBS=
+
+
+# ********** OPTIONAL: MODIFY the next line ***
+# additional C targets or libraries should be added below
+LOCAL_EXTRA_TARGETS=
+
+OBJS= $(COMMON_OBJS) $(UNIX_OBJS)
+
+
+
+
+
+LIBLIST = $(REQUIRED_LIBS)
+
+# required libs:
+#
+
+REQUIRED_LIBS= libstx_libbasic \
+ libstx_libbasic2 \
+ libstx_libcomp \
+ libstx_libview \
+ libstx_libui \
+ libstx_libview2 \
+ libstx_goodies_sunit \
+
+
+REQUIRED_LIBOBJS= $(TOP)/libbasic/libstx_libbasic$(O_EXT) \
+ $(TOP)/libbasic2/libstx_libbasic2$(O_EXT) \
+ $(TOP)/libcomp/libstx_libcomp$(O_EXT) \
+ $(TOP)/libview/libstx_libview$(O_EXT) \
+ $(TOP)/libui/libstx_libui$(O_EXT) \
+ $(TOP)/libview2/libstx_libview2$(O_EXT) \
+ $(TOP)/goodies/sunit/libstx_goodies_sunit$(O_EXT) \
+
+
+REQUIRED_LINK_LIBOBJS= libstx_libbasic$(O_EXT) \
+ libstx_libbasic2$(O_EXT) \
+ libstx_libcomp$(O_EXT) \
+ libstx_libview$(O_EXT) \
+ libstx_libui$(O_EXT) \
+ libstx_libview2$(O_EXT) \
+ libstx_goodies_sunit$(O_EXT) \
+
+
+REQUIRED_SUPPORT_DIRS=RESOURCEFILES
+
+target: ALL
+
+all::   prereq ALL_NP
+
+# like ALL, but not prereqs
+ALL_NP:: exe $(REQUIRED_SUPPORT_DIRS) setup
+
+exe:    scheme2013 
+
+scheme2013: $(APP_DIRS_TO_MAKE) $(APP_LIBOBJS) $(REQUIRED_LIBOBJS) $(OBJS)
+	$(MAKE) link_scheme2013
+
+
+link_scheme2013:
+	$(MAKE) NON_GUI_APPLICATION \
+		    TARGET=scheme2013 \
+		    APPLICATION_CLASSES="$(COMMON_CLASSES) $(UNIX_CLASSES)" \
+		    APPLICATION_OBJS="$(OBJS)" \
+		    APPLICATION_LIBLIST="$(REQUIRED_LIBS)" \
+		    APPLICATION_LIBOBJS="$(REQUIRED_LIBOBJS)" \
+		    APPLICATION_LINK_LIBOBJS="$(REQUIRED_LINK_LIBOBJS)" \
+		    STARTUP_CLASS="SchemeStartup" \
+		    STARTUP_SELECTOR="start" \
+		    MAIN_DEFINES="-DIGNORE_IMAGE -DNO_DISPLAY"
+
+# build all mandatory prerequisite packages (containing superclasses) for this package
+prereq:
+	$(MAKE) FORCE=@@@FORCE-BUILD@@@ $(REQUIRED_LIBOBJS)
+
+setup::
+	@if test -d autopackage; then \
+	    makepackage; \
+	else \
+	    echo "Error: make setup not yet available in linux/unix"; \
+	    exit 1; \
+	fi
+
+SOURCEFILES: scheme2013_SOURCES \
+	stx_SOURCES
+
+
+
+
+RESOURCEFILES: scheme2013_RESOURCES scheme2013_BITMAPS  \
+	stx_RESOURCES stx_STYLES stx_BITMAPS
+
+
+scheme2013_RESOURCES: 
+	mkdir -p resources/cg/hdm/scheme2013
+	-cp ../resources/*.rs ../resources/*.style resources/cg/hdm/scheme2013/..
+
+scheme2013_BITMAPS: 
+	mkdir -p resources/cg/hdm/scheme2013/bitmaps
+	-cp *.ico *.gif *.png resources/cg/hdm/scheme2013/bitmaps
+
+
+
+stx_RESOURCES: \
+	keyboard.rc \
+	keyboardMacros.rc \
+	display.rc \
+	libbasic_RESOURCES \
+	libview_RESOURCES \
+	libtool_RESOURCES  \
+	libtool2_RESOURCES
+
+keyboard.rc: $(TOP)/projects/smalltalk/keyboard.rc
+	cp $(TOP)/projects/smalltalk/keyboard.rc .
+
+keyboardMacros.rc: $(TOP)/projects/smalltalk/keyboardMacros.rc
+	cp $(TOP)/projects/smalltalk/keyboardMacros.rc .
+
+display.rc: $(TOP)/projects/smalltalk/display.rc
+	cp $(TOP)/projects/smalltalk/display.rc .
+
+stx_STYLES: 
+	mkdir -p resources/stx/libview
+	mkdir -p resources/stx/libview/styles
+	cp $(TOP)/libview/styles/*.common resources/stx/libview/styles
+	cp $(TOP)/libview/styles/*.style resources/stx/libview/styles
+
+stx_BITMAPS: \
+	libwidg_BITMAPS
+
+libwidg_BITMAPS: 
+	mkdir -p resources/stx/libwidg/bitmaps
+	-cp $(TOP)/libwidg/bitmaps/*.* resources/stx/libwidg/bitmaps
+
+libbasic_RESOURCES: 
+	mkdir -p resources/stx/libbasic
+	-cp $(TOP)/libbasic/resources/*.* resources/stx/libbasic
+
+libtool_RESOURCES: 
+	mkdir -p resources/stx/libtool
+	-cp $(TOP)/libtool/resources/*.* resources/stx/libtool
+
+libtool2_RESOURCES: 
+	mkdir -p resources/stx/libtool2
+	-cp $(TOP)/libtool2/resources/*.* resources/stx/libtool2
+
+libview_RESOURCES: 
+	mkdir -p resources/stx/libview
+	-cp $(TOP)/libview/resources/*.* resources/stx/libview
+
+libview2_RESOURCES: 
+	mkdir -p resources/stx/libview2
+	-cp $(TOP)/libview2/resources/*.* resources/stx/libview2
+
+bitmaps:
+	mkdir -p bitmaps
+
+doc:
+	mkdir -p doc
+
+
+
+libstx_libbasic.so: $(TOP)/libbasic/libstx_libbasic.so
+	ln -sf $(TOP)/libbasic/libstx_libbasic.so .
+
+$(TOP)/libbasic/libstx_libbasic.so: $(FORCE)
+	cd $(TOP)/libbasic && $(MAKE) "CFLAGS_LOCAL=$(GLOBALDEFINES) "
+
+libstx_libbasic2.so: $(TOP)/libbasic2/libstx_libbasic2.so
+	ln -sf $(TOP)/libbasic2/libstx_libbasic2.so .
+
+$(TOP)/libbasic2/libstx_libbasic2.so: $(FORCE)
+	cd $(TOP)/libbasic2 && $(MAKE) "CFLAGS_LOCAL=$(GLOBALDEFINES) "
+
+libstx_libcomp.so: $(TOP)/libcomp/libstx_libcomp.so
+	ln -sf $(TOP)/libcomp/libstx_libcomp.so .
+
+$(TOP)/libcomp/libstx_libcomp.so: $(FORCE)
+	cd $(TOP)/libcomp && $(MAKE) "CFLAGS_LOCAL=$(GLOBALDEFINES) "
+
+libstx_libview.so: $(TOP)/libview/libstx_libview.so
+	ln -sf $(TOP)/libview/libstx_libview.so .
+
+$(TOP)/libview/libstx_libview.so: $(FORCE)
+	cd $(TOP)/libview && $(MAKE) "CFLAGS_LOCAL=$(GLOBALDEFINES) "
+
+libstx_libui.so: $(TOP)/libui/libstx_libui.so
+	ln -sf $(TOP)/libui/libstx_libui.so .
+
+$(TOP)/libui/libstx_libui.so: $(FORCE)
+	cd $(TOP)/libui && $(MAKE) "CFLAGS_LOCAL=$(GLOBALDEFINES) "
+
+libstx_libview2.so: $(TOP)/libview2/libstx_libview2.so
+	ln -sf $(TOP)/libview2/libstx_libview2.so .
+
+$(TOP)/libview2/libstx_libview2.so: $(FORCE)
+	cd $(TOP)/libview2 && $(MAKE) "CFLAGS_LOCAL=$(GLOBALDEFINES) "
+
+libstx_goodies_sunit.so: $(TOP)/goodies/sunit/libstx_goodies_sunit.so
+	ln -sf $(TOP)/goodies/sunit/libstx_goodies_sunit.so .
+
+$(TOP)/goodies/sunit/libstx_goodies_sunit.so: $(FORCE)
+	cd $(TOP)/goodies/sunit && $(MAKE) "CFLAGS_LOCAL=$(GLOBALDEFINES) "
+
+
+
+
+
+
+
+
+
+
+clean::
+	-rm -f *.so scheme2013.$(O)
+
+clobber:: clean
+	-rm -f scheme2013 *.img *.sav
+
+# BEGINMAKEDEPEND --- do not remove this line; make depend needs it
+$(OUTDIR)SchemeEvaluator.$(O) SchemeEvaluator.$(H): SchemeEvaluator.st $(INCLUDE_TOP)/stx/libbasic/Object.$(H) $(STCHDR)
+$(OUTDIR)SchemeInterpreter.$(O) SchemeInterpreter.$(H): SchemeInterpreter.st $(INCLUDE_TOP)/stx/libbasic/Object.$(H) $(STCHDR)
+$(OUTDIR)SchemeObject.$(O) SchemeObject.$(H): SchemeObject.st $(INCLUDE_TOP)/stx/libbasic/Object.$(H) $(STCHDR)
+$(OUTDIR)SchemePrinter.$(O) SchemePrinter.$(H): SchemePrinter.st $(INCLUDE_TOP)/stx/libbasic/Object.$(H) $(STCHDR)
+$(OUTDIR)SchemeReader.$(O) SchemeReader.$(H): SchemeReader.st $(INCLUDE_TOP)/stx/libbasic/Object.$(H) $(STCHDR)
+$(OUTDIR)SchemeStartup.$(O) SchemeStartup.$(H): SchemeStartup.st $(INCLUDE_TOP)/stx/libbasic/StandaloneStartup.$(H) $(INCLUDE_TOP)/stx/libbasic/Object.$(H) $(STCHDR)
+$(OUTDIR)cg_hdm_scheme2013.$(O) cg_hdm_scheme2013.$(H): cg_hdm_scheme2013.st $(INCLUDE_TOP)/stx/libbasic/ApplicationDefinition.$(H) $(INCLUDE_TOP)/stx/libbasic/ProjectDefinition.$(H) $(INCLUDE_TOP)/stx/libbasic/Object.$(H) $(STCHDR)
+$(OUTDIR)SchemeBoolean.$(O) SchemeBoolean.$(H): SchemeBoolean.st $(INCLUDE_TOP)/cg/hdm/scheme2013/SchemeObject.$(H) $(INCLUDE_TOP)/stx/libbasic/Object.$(H) $(STCHDR)
+$(OUTDIR)SchemeCons.$(O) SchemeCons.$(H): SchemeCons.st $(INCLUDE_TOP)/cg/hdm/scheme2013/SchemeObject.$(H) $(INCLUDE_TOP)/stx/libbasic/Object.$(H) $(STCHDR)
+$(OUTDIR)SchemeEnvironment.$(O) SchemeEnvironment.$(H): SchemeEnvironment.st $(INCLUDE_TOP)/cg/hdm/scheme2013/SchemeObject.$(H) $(INCLUDE_TOP)/stx/libbasic/Object.$(H) $(STCHDR)
+$(OUTDIR)SchemeNil.$(O) SchemeNil.$(H): SchemeNil.st $(INCLUDE_TOP)/cg/hdm/scheme2013/SchemeObject.$(H) $(INCLUDE_TOP)/stx/libbasic/Object.$(H) $(STCHDR)
+$(OUTDIR)SchemeNumber.$(O) SchemeNumber.$(H): SchemeNumber.st $(INCLUDE_TOP)/cg/hdm/scheme2013/SchemeObject.$(H) $(INCLUDE_TOP)/stx/libbasic/Object.$(H) $(STCHDR)
+$(OUTDIR)SchemeString.$(O) SchemeString.$(H): SchemeString.st $(INCLUDE_TOP)/cg/hdm/scheme2013/SchemeObject.$(H) $(INCLUDE_TOP)/stx/libbasic/Object.$(H) $(STCHDR)
+$(OUTDIR)SchemeSymbol.$(O) SchemeSymbol.$(H): SchemeSymbol.st $(INCLUDE_TOP)/cg/hdm/scheme2013/SchemeObject.$(H) $(INCLUDE_TOP)/stx/libbasic/Object.$(H) $(STCHDR)
+$(OUTDIR)SchemeUserDefinedFunction.$(O) SchemeUserDefinedFunction.$(H): SchemeUserDefinedFunction.st $(INCLUDE_TOP)/cg/hdm/scheme2013/SchemeObject.$(H) $(INCLUDE_TOP)/stx/libbasic/Object.$(H) $(STCHDR)
+$(OUTDIR)SchemeVoid.$(O) SchemeVoid.$(H): SchemeVoid.st $(INCLUDE_TOP)/cg/hdm/scheme2013/SchemeObject.$(H) $(INCLUDE_TOP)/stx/libbasic/Object.$(H) $(STCHDR)
+$(OUTDIR)SchemeFloat.$(O) SchemeFloat.$(H): SchemeFloat.st $(INCLUDE_TOP)/cg/hdm/scheme2013/SchemeNumber.$(H) $(INCLUDE_TOP)/cg/hdm/scheme2013/SchemeObject.$(H) $(INCLUDE_TOP)/stx/libbasic/Object.$(H) $(STCHDR)
+$(OUTDIR)SchemeInteger.$(O) SchemeInteger.$(H): SchemeInteger.st $(INCLUDE_TOP)/cg/hdm/scheme2013/SchemeNumber.$(H) $(INCLUDE_TOP)/cg/hdm/scheme2013/SchemeObject.$(H) $(INCLUDE_TOP)/stx/libbasic/Object.$(H) $(STCHDR)
+
+# ENDMAKEDEPEND --- do not remove this line

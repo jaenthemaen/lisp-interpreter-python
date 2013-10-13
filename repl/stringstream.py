@@ -1,7 +1,10 @@
 class Stringstream(object):
 
     def __init__(self, stringinput = ""):
-        self.stream = stringinput.strip()
+        self.stream = stringinput
+
+    def skip_spaces(self):
+        self.stream = self.stream.lstrip()
 
     def read_char(self):
         if len(self.stream) > 0:

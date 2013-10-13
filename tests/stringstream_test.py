@@ -16,18 +16,5 @@ class TestStringstreamFunctions(unittest.TestCase):
         self.assertEqual(self.stream.peek_char(), "a")
         self.assertEqual(self.stream.stream, "abcde")
 
-    #     # should raise an exception for an immutable sequence
-    #     self.assertRaises(TypeError, random.shuffle, (1,2,3))
-
-    # def test_choice(self):
-    #     element = random.choice(self.seq)
-    #     self.assertTrue(element in self.seq)
-
-    # def test_sample(self):
-    #     with self.assertRaises(ValueError):
-    #         random.sample(self.seq, 20)
-    #     for element in random.sample(self.seq, 5):
-    #         self.assertTrue(element in self.seq)
-
 if __name__ == '__main__':
     unittest.main()

@@ -1,0 +1,32 @@
+
+# generated from project definition
+
+# load package dependencies
+load 'package.deps.rake'
+
+# kludge: clear some invalid dependencies of libwidg
+# (should be fixed in baseline)
+clear "stx:libwidg" => "stx:libui"
+clear "stx:libwidg2" => "stx:libui"
+
+project :'scheme2013:baseline' do
+  # preamble
+  
+  # --------
+
+  package "stx:libbasic"
+  package "stx:libbasic2"
+  package "stx:libcomp"
+  package "stx:libview"
+  package "stx:libui"
+  package "stx:libview2"
+  package "stx:goodies/sunit"
+
+
+  application "cg:hdm/scheme2013"
+
+  # postamble
+  
+  # ---------
+
+end
