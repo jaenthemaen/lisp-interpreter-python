@@ -1,1 +1,2 @@
-__all__ = ["evaluator", "reader", "printer"]
+__all__ = ["evaluator", "reader", "printer", "stringstream"]
+

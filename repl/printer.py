@@ -1,4 +1,4 @@
-class Printer:
+class Printer(object):
     """
         responsible for printing out evaluated expressions and symbols
     """
