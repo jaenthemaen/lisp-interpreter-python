@@ -1,7 +1,7 @@
 class Reader(object):
     """ responsible for reading and parsing incoming code """
 
-    def readFromStream(self, stream):
+    def read_from_stream(self, stream):
         peek_char = ""
 
         stream.skip_spaces()
@@ -9,21 +9,24 @@ class Reader(object):
         peek_char = stream.peek_char()
 
         if peek_char.isdigit():
-            return self.readNumberFromStream(stream)
+            return self.read_number_from_stream(stream)
 
         if peek_char == '"':
-            return self.readStringFromStream(stream)
+            return self.read_string_from_stream(stream)
 
         if peek_char == "(":
-            return self.readListFromStream(stream)
+            return self.read_list_from_stream(stream)
 
-        return self.readSymbolFromStream(stream)
+        return self.read_symbol_from_stream(stream)
 
-    def readNumberFromStream(self, stream):
+    def read_number_from_stream(self, stream):
         pass
 
-    def readListFromStream(self, stream):
+    def read_list_from_stream(self, stream):
         pass
 
-    def readSymbolFromStream(self, stream):
+    def read_symbol_from_stream(self, stream):
+        pass
+
+    def read_string_from_stream(self, stream):
         pass
