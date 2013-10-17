@@ -1,1 +1,1 @@
-__all__ = []
+__all__ = ["scheme_boolean", "scheme_cons", "scheme_environment", "scheme_float", "scheme_integer", "scheme_nil",	"scheme_number", "scheme_object", "scheme_string", "scheme_symbol", "scheme_user_defined_function", "scheme_void"]

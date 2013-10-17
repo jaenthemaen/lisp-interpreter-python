@@ -12,13 +12,13 @@ class Stringstream(object):
             self.stream = self.stream[1:]
             return first_char
         else:
-            return "EOF"
+            return None
 
     def peek_char(self):
         if len(self.stream) > 0:
             return self.stream[0]
         else:
-            return "EOF"
+            return None
 
     def set_stream(self, stringinput):
         self.stream = stringinput

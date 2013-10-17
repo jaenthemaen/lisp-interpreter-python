@@ -24,9 +24,8 @@ class Reader(object):
 
     def read_number_from_stream(self, stream):
         value = 0
-        x = stream.peek_char()
 
-        while x is not None and x.isdigit():
+        while stream.peek_char() is not None and stream.peek_char().isdigit():
             value = value * 10 + int(stream.read_char())
 
         return SchemeInteger(value)
