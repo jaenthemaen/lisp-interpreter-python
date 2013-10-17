@@ -1,5 +1,6 @@
 from repl import *
 
+
 def start():
     """ setting up the repl loop """
 
@@ -25,6 +26,7 @@ def start():
 
         # print dat shite!
         scheme_printer.print_scheme(evaluated_list)
+
 
 def init():
     """ loading standard library into VM """

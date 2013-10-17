@@ -1,3 +1,6 @@
+from scheme_objects.scheme_integer import SchemeInteger
+
+
 class Reader(object):
     """ responsible for reading and parsing incoming code """
 
@@ -20,7 +23,13 @@ class Reader(object):
         return self.read_symbol_from_stream(stream)
 
     def read_number_from_stream(self, stream):
-        pass
+        value = 0
+        x = stream.peek_char()
+
+        while x is not None and x.isdigit():
+            value = value * 10 + int(stream.read_char())
+
+        return SchemeInteger(value)
 
     def read_list_from_stream(self, stream):
         pass
