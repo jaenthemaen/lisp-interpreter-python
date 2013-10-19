@@ -28,5 +28,23 @@ class TestReaderFunctions(unittest.TestCase):
         self.obj = self.reader.read_from_stream(self.stream)
         self.assertEqual(self.obj.value, 132)
 
+    def test_float_parsing(self):
+        self.stream.set_stream("1234.567")
+        self.obj = self.reader.read_from_stream(self.stream)
+        self.assertTrue(isinstance(self.obj, SchemeFloat))
+
+    def test_float_parsing_2(self):
+        self.stream.set_stream("1234.")
+        self.obj = self.reader.read_from_stream(self.stream)
+        self.assertTrue(isinstance(self.obj, SchemeFloat))
+
+
+    def test_float_value(self):
+        self.stream.set_stream("1234.567")
+        self.obj = self.reader.read_from_stream(self.stream)
+        self.assertEqual(self.obj.value, 1234.567)
+
+
+
 if __name__ == '__main__':
     unittest.main()

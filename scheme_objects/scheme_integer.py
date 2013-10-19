@@ -2,10 +2,10 @@ from scheme_objects.scheme_number import SchemeNumber
 
 
 class SchemeInteger(SchemeNumber):
-	"""Scheme Integer Values"""
-	def __init__(self, int_value):
-		super(SchemeInteger, self).__init__()
-		self.value = int_value
+    """Scheme Integer Values"""
 
-	def to_string(self):
-		return str(self.value)
+    def __init__(self, num_value):
+        super(SchemeInteger, self).__init__(num_value)
+
+    def is_scheme_integer(self):
+        return True
