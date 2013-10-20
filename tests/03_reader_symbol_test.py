@@ -3,6 +3,8 @@ __author__ = 'jan'
 import unittest
 from repl import *
 from scheme_objects.scheme_symbol import SchemeSymbol
+from scheme_objects.scheme_cons import SchemeCons
+from scheme_objects.scheme_float import SchemeFloat
 
 
 class ReaderSymbolTestCase(unittest.TestCase):
@@ -27,6 +29,13 @@ class ReaderSymbolTestCase(unittest.TestCase):
         self.assertTrue(isinstance(result, SchemeSymbol))
         self.assertEqual(result.name, "my_function+###")
 
+    def test_symbol_in_cons(self):
+        self.stream.set_stream("(define-dat-shite 15.12345)")
+        result = self.reader.read_from_stream(self.stream)
+        self.assertTrue(isinstance(result, SchemeCons))
+        self.assertTrue(isinstance(result.car, SchemeSymbol))
+        self.assertTrue(isinstance(result.cdr.car, SchemeFloat))
+        self.assertEqual(result.car.name, "define-dat-shite")
 
 if __name__ == '__main__':
     unittest.main()

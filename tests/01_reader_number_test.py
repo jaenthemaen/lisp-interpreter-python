@@ -2,7 +2,8 @@ import unittest
 from repl import *
 from scheme_objects.scheme_integer import SchemeInteger
 from scheme_objects.scheme_float import SchemeFloat
-
+from scheme_objects.scheme_symbol import SchemeSymbol
+from scheme_objects.scheme_string import SchemeString
 
 class TestReaderFunctions(unittest.TestCase):
 
@@ -44,6 +45,21 @@ class TestReaderFunctions(unittest.TestCase):
         self.obj = self.reader.read_from_stream(self.stream)
         self.assertEqual(self.obj.value, 1234.567)
 
+    def test_float_value_double_point_error(self):
+        self.stream.set_stream("123.123.123")
+        result = self.reader.read_from_stream(self.stream)
+        self.assertTrue(isinstance(result, SchemeSymbol))
+        self.assertEqual(result.name, "123.123.123")
+
+    def test_floaty_symbol_in_nested_list(self):
+        self.stream.set_stream('(123.123.123("a" test-test))')
+        result = self.reader.read_from_stream(self.stream)
+        self.assertTrue(isinstance(result.car, SchemeSymbol))
+        print result.cdr.car.car.__class__.__name__
+        self.assertTrue(isinstance(result.cdr.car.car, SchemeString))
+        self.assertTrue(isinstance(result.cdr.car.cdr.car, SchemeSymbol))
+        self.assertEqual(result.car.name, "123.123.123")
+        self.assertEqual(result.cdr.car.car.content, "a")
 
 
 if __name__ == '__main__':
