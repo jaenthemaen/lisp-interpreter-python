@@ -4,7 +4,7 @@ from repl import *
 class TestStringstreamFunctions(unittest.TestCase):
 
     def setUp(self):
-        self.stream = stringstream.Stringstream()
+        self.stream = string_stream.StringStream()
 
     def test_first_element(self):
         self.stream.set_stream("abcde")

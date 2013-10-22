@@ -5,10 +5,11 @@ from scheme_objects.scheme_float import SchemeFloat
 from scheme_objects.scheme_symbol import SchemeSymbol
 from scheme_objects.scheme_string import SchemeString
 
+
 class TestReaderFunctions(unittest.TestCase):
 
     def setUp(self):
-        self.stream = stringstream.Stringstream()
+        self.stream = string_stream.StringStream()
         self.reader = reader.Reader()
         self.printer = printer.Printer()
         self.obj = None

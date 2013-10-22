@@ -1,7 +1,7 @@
-class Stringstream(object):
+class StringStream(object):
 
-    def __init__(self, stringinput = ""):
-        self.stream = stringinput
+    def __init__(self, string_input=""):
+        self.stream = string_input
 
     def skip_spaces(self):
         self.stream = self.stream.lstrip()
@@ -20,6 +20,12 @@ class Stringstream(object):
         else:
             return None
 
-    def set_stream(self, stringinput):
-        self.stream = stringinput
+    def set_stream(self, string_input):
+        self.stream = string_input
+
+    def get_stream(self):
+        return self.stream
+
+    def write_chars(self, string_input):
+        self.stream += string_input
 

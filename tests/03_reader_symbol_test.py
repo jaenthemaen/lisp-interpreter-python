@@ -10,7 +10,7 @@ from scheme_objects.scheme_float import SchemeFloat
 class ReaderSymbolTestCase(unittest.TestCase):
 
     def setUp(self):
-        self.stream = stringstream.Stringstream()
+        self.stream = string_stream.StringStream()
         self.reader = reader.Reader()
 
     def test_single_symbol(self):

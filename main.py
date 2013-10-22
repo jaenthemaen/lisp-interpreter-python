@@ -13,19 +13,22 @@ def start():
 
     while True:
 
-        input_string = raw_input('code some scheme here: ')
+        input_string = raw_input('<scheme>: ')
 
         # create a stream object from string
-        current_stream = stringstream.Stringstream(input_string)
+        read_stream = string_stream.StringStream(input_string)
+        write_stream = string_stream.StringStream()
 
         # retrieve parsed string as list from reader
-        parsed_list = scheme_reader.read_from_stream(current_stream)
+        scheme_obj = scheme_reader.read_from_stream(read_stream)
 
-        # hand list over to eval
-        evaluated_list = scheme_evaluator.evaluate(parsed_list)
+        # hand list over to eval [skipped for now!]
+        # evaluated_list = scheme_evaluator.evaluate(parsed_list)
 
         # print dat shite!
-        scheme_printer.print_scheme(evaluated_list)
+        scheme_printer.print_scheme_object(scheme_obj, write_stream)
+
+        print write_stream.get_stream()
 
 
 def init():
