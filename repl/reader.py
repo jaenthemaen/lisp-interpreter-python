@@ -4,13 +4,20 @@ from scheme_objects.scheme_nil import SchemeNil
 from scheme_objects.scheme_cons import SchemeCons
 from scheme_objects.scheme_symbol import SchemeSymbol
 from scheme_objects.scheme_string import SchemeString
+from copy import deepcopy
 import scheme_exceptions.reader_exceptions as readerEx
 
 
 class Reader(object):
     """ responsible for reading and parsing incoming code """
+    stream_preprocessed = False
 
     def read_from_stream(self, stream):
+
+        if not self.stream_preprocessed:
+            self.preprocess_stream_content(deepcopy(stream))
+            self.stream_preprocessed = True
+
         stream.skip_spaces()
         pch = stream.peek_char()
 
@@ -26,6 +33,35 @@ class Reader(object):
             return self.read_list_from_stream(stream)
 
         return self.read_symbol_from_stream(stream)
+
+    def preprocess_stream_content(self, stream):
+        paren_opened = False
+        paren_opened_count = 0
+        paren_closed_count = 0
+
+        current_char = stream.read_char()
+
+        while current_char is not None:
+            if current_char is '(':
+                paren_opened_count += 1
+                paren_opened = True
+
+            if current_char is ')':
+                if not paren_opened:
+                    raise readerEx.MalformedListException(
+                        "Met closing parenthesis without matching opening parenthesis.")
+                else:
+                    paren_closed_count += 1
+                    if paren_closed_count == paren_opened_count:
+                        paren_opened = False
+
+            current_char = stream.read_char()
+
+        if paren_closed_count == paren_opened_count:
+            return True
+        else:
+            raise readerEx.MalformedListException(
+                "Parenthesis counts aren't matching! Opened:" + str(paren_opened_count) + ", Closed:" + str(paren_closed_count))
 
     def read_number_from_stream(self, stream):
         value = ""
@@ -56,8 +92,6 @@ class Reader(object):
         elif stop_ch is not None and stop_ch != '(' and stop_ch != ')' and stop_ch.isspace() is False:
             stream.set_stream(value + stream.stream)
             return self.read_symbol_from_stream(stream)
-
-
 
         if is_float:
             return SchemeFloat(float(value))
