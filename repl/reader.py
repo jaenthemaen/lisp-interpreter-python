@@ -4,12 +4,7 @@ from scheme_objects.scheme_nil import SchemeNil
 from scheme_objects.scheme_cons import SchemeCons
 from scheme_objects.scheme_symbol import SchemeSymbol
 from scheme_objects.scheme_string import SchemeString
-
-
-class StringUnfinishedException(Exception):
-    def __init__(self, message, content):
-        super(StringUnfinishedException, self).__init__(message)
-        self.content = content
+import scheme_exceptions.reader_exceptions as readerEx
 
 
 class Reader(object):
@@ -36,7 +31,6 @@ class Reader(object):
         value = ""
         is_float = False
 
-
         while stream.peek_char() is not None and stream.peek_char().isdigit():
             value += stream.read_char()
 
@@ -44,7 +38,9 @@ class Reader(object):
         # must continue and assume it reads a float value.
         # If another character shows up before whitespace or bracket
         # it is assumed to be a symbol!
-        if stream.peek_char() == '.':
+        stop_ch = stream.peek_char()
+
+        if stop_ch == '.':
             is_float = True
             value += stream.read_char()
 
@@ -57,6 +53,11 @@ class Reader(object):
             if ch is not None and ch.isspace() is False and ch is not ')' and ch is not '(':
                 stream.set_stream(value + stream.stream)
                 return self.read_symbol_from_stream(stream)
+        elif stop_ch is not None and stop_ch != '(' and stop_ch != ')' and stop_ch.isspace() is False:
+            stream.set_stream(value + stream.stream)
+            return self.read_symbol_from_stream(stream)
+
+
 
         if is_float:
             return SchemeFloat(float(value))
@@ -64,18 +65,17 @@ class Reader(object):
             return SchemeInteger(int(value))
 
     def read_list_from_stream(self, stream):
-        element = None
-        rest_list = None
 
         stream.skip_spaces()
         if stream.peek_char() == ')':
             stream.read_char()
             return SchemeNil()
-
-        element = self.read_from_stream(stream)
-        rest_list = self.read_list_from_stream(stream)
-
-        return SchemeCons(element, rest_list)
+        elif stream.peek_char() is None:
+            raise readerEx.MalformedListException("No matching closing bracket met before EOF!")
+        else:
+            element = self.read_from_stream(stream)
+            rest_list = self.read_list_from_stream(stream)
+            return SchemeCons(element, rest_list)
 
     def read_symbol_from_stream(self, stream):
         symbol_name = ""
@@ -108,7 +108,7 @@ class Reader(object):
             ch = stream.peek_char()
 
         if ch == None:
-            raise StringUnfinishedException("String didn't end properly with quotes.", string_content)
+            raise readerEx.StringUnfinishedException("String didn't end properly with quotes.", string_content)
         elif ch == '"':
             stream.read_char()
             return SchemeString(string_content)

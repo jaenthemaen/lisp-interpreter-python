@@ -25,6 +25,12 @@ class TestReaderFunctions(unittest.TestCase):
         self.obj = self.reader.read_from_stream(self.stream)
         self.assertEqual(self.obj.value, 132)
 
+    def test_integer_symbol_separation(self):
+        self.stream.set_stream("123abcde")
+        self.obj =self.reader.read_from_stream(self.stream)
+        self.assertTrue(isinstance(self.obj, SchemeSymbol))
+        self.assertEqual(self.obj.name, "123abcde")
+
     def test_integer_leading_zeros(self):
         self.stream.set_stream("0000000132")
         self.obj = self.reader.read_from_stream(self.stream)
