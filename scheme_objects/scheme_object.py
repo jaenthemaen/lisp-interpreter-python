@@ -38,3 +38,6 @@ class SchemeObject(object):
 
     def is_scheme_void(self):
         return False
+
+    def is_scheme_quote(self):
+        return False
