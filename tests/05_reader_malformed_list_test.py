@@ -25,11 +25,9 @@ class MalformedListsTestCase(unittest.TestCase):
             self.stream.set_stream('10   123)')
             result = self.reader.read_from_stream(self.stream)
             self.printer.print_scheme_object(result, self.output_stream)
-            print self.output_stream.get_stream()
 
         desired_exception = cm.exception
         self.assertTrue(isinstance(desired_exception, readerEx.MalformedListException))
-        print cm.exception.message
 
 
 if __name__ == '__main__':

@@ -4,6 +4,7 @@ from scheme_objects.scheme_nil import SchemeNil
 from scheme_objects.scheme_cons import SchemeCons
 from scheme_objects.scheme_symbol import SchemeSymbol
 from scheme_objects.scheme_string import SchemeString
+from scheme_objects.scheme_quote import SchemeQuote
 from copy import deepcopy
 import scheme_exceptions.reader_exceptions as readerEx
 
@@ -27,6 +28,10 @@ class Reader(object):
         if pch == '"':
             stream.read_char()
             return self.read_string_from_stream(stream)
+
+        if pch == "'":
+            stream.read_char()
+            return SchemeQuote(self.read_from_stream(stream))
 
         if pch == "(":
             stream.read_char()
@@ -146,3 +151,4 @@ class Reader(object):
         elif ch == '"':
             stream.read_char()
             return SchemeString(string_content)
+

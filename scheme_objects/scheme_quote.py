@@ -3,13 +3,12 @@ from scheme_objects.scheme_object import SchemeObject
 
 class SchemeQuote(SchemeObject):
     """
-        Stores a Scheme Quote as a string, which needs to be parsed and
-        evaluated upon usage.
+        Stores a Scheme Quote. Capsulates inner Objects that are already parsed.
     """
     _content = None
 
-    def __init__(self, content=""):
-        super(SchemeQuote, self).__init__(num_value)
+    def __init__(self, content):
+        super(SchemeQuote, self).__init__()
         self._content = content
 
     def get_content(self):

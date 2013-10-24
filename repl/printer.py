@@ -35,6 +35,9 @@ class Printer(object):
             stream.write_chars('true')
             return
 
+        if scheme_obj.is_scheme_quote():
+            return self.print_scheme_object(scheme_obj.get_content(), stream)
+
         if scheme_obj.is_scheme_void():
             return
 
