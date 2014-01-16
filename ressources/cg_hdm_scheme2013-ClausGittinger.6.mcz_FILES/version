@@ -1,4 +1,0 @@
-(name 'cg:hdm/scheme2013-ClausGittinger.6' message 'Commit message
-' id '4da31fd7-c75f-4bba-a826-9878498dc6d7' date '21-Apr-2013' time '10:18:22' author 'ClausGittinger' ancestors ((name 'cg:hdm/scheme2013-ClausGittinger.5' message 'Commit message
-' id 'e21dc8dc-ede9-489a-8e92-002ac76c625e' date '20-Apr-2013' time '13:02:13' author 'ClausGittinger' ancestors ((name 'cg:hdm/scheme2013-ClausGittinger.4' message 'Commit message
-' id 'a0d3b904-9450-45f1-b5c2-4c5df0e34007' date '20-Apr-2013' time '12:53:51' author 'ClausGittinger' ancestors () stepChildren ())) stepChildren ())) stepChildren ())
