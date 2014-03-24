@@ -1,11 +1,11 @@
 import unittest
-from repl import *
+import reader, printer, evaluator, utilities
 
 
 class TestStringstreamFunctions(unittest.TestCase):
 
     def setUp(self):
-        self.stream = string_stream.StringStream()
+        self.stream = utilities.StringStream()
 
     def test_first_element(self):
         self.stream.set_stream("abcde")

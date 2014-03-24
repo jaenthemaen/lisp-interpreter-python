@@ -1,16 +1,14 @@
 __author__ = 'jan'
 
 import unittest
-from repl import *
-from scheme_objects.scheme_symbol import SchemeSymbol
-from scheme_objects.scheme_cons import SchemeCons
-from scheme_objects.scheme_float import SchemeFloat
+import reader, printer, evaluator, utilities
+from scheme_objects import *
 
 
 class ReaderSymbolTestCase(unittest.TestCase):
 
     def setUp(self):
-        self.stream = string_stream.StringStream()
+        self.stream = utilities.StringStream()
         self.reader = reader.Reader()
 
     def test_single_symbol(self):

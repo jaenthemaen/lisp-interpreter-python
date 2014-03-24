@@ -1,13 +1,12 @@
-__author__ = 'jan'
-from repl import *
+import reader, printer, evaluator, utilities
 import unittest
 
 
 class PrinterQupteTestCase(unittest.TestCase):
 
     def setUp(self):
-        self.input_stream = string_stream.StringStream()
-        self.output_stream = string_stream.StringStream()
+        self.input_stream = utilities.StringStream()
+        self.output_stream = utilities.StringStream()
         self.reader = reader.Reader()
         self.printer = printer.Printer()
 

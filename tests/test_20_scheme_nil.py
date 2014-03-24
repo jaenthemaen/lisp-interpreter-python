@@ -1,8 +1,7 @@
 __author__ = 'jan'
 
 import unittest
-from scheme_objects.scheme_nil import SchemeNil
-from scheme_objects.scheme_number import SchemeNumber
+from scheme_objects import *
 
 class SchemeNilTestCase(unittest.TestCase):
 

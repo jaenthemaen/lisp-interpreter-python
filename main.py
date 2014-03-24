@@ -1,5 +1,7 @@
-from repl import *
-
+from evaluator import Evaluator
+from reader import Reader
+from printer import Printer
+from utilities import StringStream
 
 def start():
     """ setting up the repl loop """
@@ -7,17 +9,17 @@ def start():
     init()
 
     # setup needed objects:
-    scheme_reader = reader.Reader()
-    scheme_evaluator = evaluator.Evaluator()
-    scheme_printer = printer.Printer()
+    scheme_reader = Reader()
+    scheme_evaluator = Evaluator()
+    scheme_printer = Printer()
 
     while True:
 
         input_string = raw_input('<scheme>: ')
 
         # create a stream object from string
-        read_stream = string_stream.StringStream(input_string)
-        write_stream = string_stream.StringStream()
+        read_stream = StringStream(input_string)
+        write_stream = StringStream()
 
         # retrieve parsed string as list from reader
         scheme_obj = scheme_reader.read_from_stream(read_stream)
@@ -27,7 +29,7 @@ def start():
 
         # print dat shite!
         scheme_printer.print_scheme_object(scheme_obj, write_stream)
-        
+
         print write_stream.get_stream()
 
 

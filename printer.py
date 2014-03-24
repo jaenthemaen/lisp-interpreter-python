@@ -1,5 +1,5 @@
-from scheme_objects.scheme_object import SchemeObject
-from repl.string_stream import StringStream
+from scheme_objects import SchemeObject
+from utilities import StringStream
 
 
 class Printer(object):
@@ -48,7 +48,7 @@ class Printer(object):
             raise Exception("user def funcs not implemented yet!")
 
         # if no object type could be detected:
-        raise Exception("UNKNOWN TYPE GIVEN TO READER!" + str(scheme_obj))
+        raise Exception("Printer encountered unknown input string!" + str(scheme_obj))
 
     def print_scheme_list(self, scheme_obj, stream):
         stream.write_chars('(')
@@ -61,7 +61,6 @@ class Printer(object):
         else:
             stream.write_chars(' ')
             self.print_scheme_rest_list(scheme_obj.cdr, stream)
-
 
     def print_scheme_float(self, scheme_obj, stream):
         stream.write_chars(str(scheme_obj.value))

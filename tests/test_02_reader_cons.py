@@ -1,17 +1,12 @@
-__author__ = 'jan'
-
 import unittest
-from repl import *
-from scheme_objects.scheme_integer import SchemeInteger
-from scheme_objects.scheme_float import SchemeFloat
-from scheme_objects.scheme_nil import SchemeNil
-from scheme_objects.scheme_cons import SchemeCons
+import reader, printer, evaluator, utilities
+from scheme_objects import *
 
 
 class MyTestCase(unittest.TestCase):
 
     def setUp(self):
-        self.stream = string_stream.StringStream()
+        self.stream = utilities.StringStream()
         self.reader = reader.Reader()
 
     def test_empty_list(self):

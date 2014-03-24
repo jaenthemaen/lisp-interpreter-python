@@ -1,15 +1,12 @@
 import unittest
-from repl import *
-from scheme_objects.scheme_integer import SchemeInteger
-from scheme_objects.scheme_float import SchemeFloat
-from scheme_objects.scheme_symbol import SchemeSymbol
-from scheme_objects.scheme_string import SchemeString
+import reader, printer, evaluator, utilities
+from scheme_objects import *
 
 
 class TestReaderFunctions(unittest.TestCase):
 
     def setUp(self):
-        self.stream = string_stream.StringStream()
+        self.stream = utilities.StringStream()
         self.reader = reader.Reader()
         self.printer = printer.Printer()
         self.obj = None

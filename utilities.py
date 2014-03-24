@@ -28,4 +28,3 @@ class StringStream(object):
 
     def write_chars(self, string_input):
         self.stream += string_input
-

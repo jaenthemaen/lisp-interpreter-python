@@ -1,10 +1,4 @@
-from scheme_objects.scheme_integer import SchemeInteger
-from scheme_objects.scheme_float import SchemeFloat
-from scheme_objects.scheme_nil import SchemeNil
-from scheme_objects.scheme_cons import SchemeCons
-from scheme_objects.scheme_symbol import SchemeSymbol
-from scheme_objects.scheme_string import SchemeString
-from scheme_objects.scheme_quote import SchemeQuote
+from scheme_objects import *
 from copy import deepcopy
 import scheme_exceptions.reader_exceptions as readerEx
 
@@ -151,4 +145,3 @@ class Reader(object):
         elif ch == '"':
             stream.read_char()
             return SchemeString(string_content)
-

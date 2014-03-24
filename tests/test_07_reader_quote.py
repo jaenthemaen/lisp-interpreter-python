@@ -1,12 +1,12 @@
 import unittest
-from repl import *
-from scheme_objects.scheme_quote import SchemeQuote
+import reader, printer, evaluator, utilities
+from scheme_objects import *
 import scheme_exceptions.reader_exceptions as readerEx
 
 
 class ReaderQuoteTestCase(unittest.TestCase):
     def setUp(self):
-        self.stream = string_stream.StringStream()
+        self.stream = utilities.StringStream()
         self.reader = reader.Reader()
 
     def test_simple_quote(self):

@@ -1,14 +1,14 @@
 __author__ = 'jan'
 
 import unittest
-from repl import *
+import reader, printer, evaluator, utilities
 import scheme_exceptions.reader_exceptions as readerEx
 
 
 class MalformedListsTestCase(unittest.TestCase):
 
     def setUp(self):
-        self.stream = string_stream.StringStream()
+        self.stream = utilities.StringStream()
         self.reader = reader.Reader()
 
     def test_misplaced_parenthesis(self):
