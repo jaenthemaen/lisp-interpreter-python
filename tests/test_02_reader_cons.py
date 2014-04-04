@@ -34,6 +34,7 @@ class MyTestCase(unittest.TestCase):
         self.assertTrue(isinstance(result.cdr, SchemeCons))
         self.assertTrue(isinstance(result.car, SchemeInteger))
         self.assertTrue(isinstance(result.cdr.car, SchemeFloat))
+        self.assertTrue(isinstance(result.cdr.cdr, SchemeNil))
 
 
 if __name__ == '__main__':

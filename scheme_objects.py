@@ -1,3 +1,6 @@
+from collections import OrderedDict
+
+
 class SchemeObject(object):
     """ root object for all scheme objects """
 
@@ -53,6 +56,7 @@ class SchemeBoolean(SchemeObject):
 
 
 class SchemeFalse(SchemeBoolean):
+    """ Singleton. """
     _instance = None
 
     def __new__(cls, *args):
@@ -70,6 +74,7 @@ class SchemeFalse(SchemeBoolean):
 
 
 class SchemeTrue(SchemeBoolean):
+    """ Singleton. """
     _instance = None
 
     def __new__(cls, *args):
@@ -99,34 +104,6 @@ class SchemeCons(SchemeObject):
 
     def is_scheme_cons(self):
         return True
-
-
-class SchemeEnvironment(SchemeObject):
-    """
-        represents environments of the scheme code being executed.
-        has a hash table containing all defined vars in this environment
-        and a reference to its parent environment, or None, if it is the
-        global environment
-    """
-    __global_env=None
-    def __init__ (self, parent_env=None):
-        self.map = OrderedDict()
-        self.map_index = []
-        self.parent_env = parent_env
-
-
-
-class SchemeContinuation(SchemeObject):
-    """
-
-    """
-    def __init__(self, parent, env, func, ast, args, retValIndex):
-        self.parent_cont = parent
-        self.environment = env
-        self.function = func
-        self.ast = ast
-        self.args = args
-        self.retValIndex = retValIndex
 
 
 class SchemeNumber(SchemeObject):
@@ -246,3 +223,78 @@ class SchemeVoid(SchemeObject):
 
     def is_scheme_void(self):
         return True
+
+
+class SchemeEnvironment(SchemeObject):
+    """
+        represents environments of the scheme code being executed.
+        has a hash table containing all defined vars in this environment
+        and a reference to its parent environment, or None, if it is the
+        global environment
+    """
+    def __init__ (self, parent_env=None):
+        self.map = dict()
+        self.parent_env = parent_env
+
+    def add_binding(self, symbol, scheme_object):
+        if symbol is not None and symbol != "" and type(scheme_object) == SchemeObject:
+            if self.map[symbol] is None:
+                self.map[symbol] = scheme_object
+            else:
+                return BindingAlreadyExistingException("Symbol already bound, no binding possible.", symbol)
+        else:
+            raise Exception("Either not a valid symbol or no scheme object given.")
+
+    def get_binding(self, symbol):
+        if symbol is not None and symbol != "":
+            if self.map[symbol] is not None:
+                return self.map[symbol]
+            elif self.parent_env is None:
+                return NoBindingForSymbolException("Symbol unbound, nothing to return.", symbol)
+            else:
+                return self.parent_env.get_binding(symbol)
+        else:
+            return Exception("No symbol given.")
+
+    def set_binding(self, symbol, scheme_object):
+        if symbol is not None and symbol != "" and type(scheme_object) == SchemeObject:
+            if self.map[symbol] is None:
+                NoBindingForSymbolException("Trying to set unbound symbol.", symbol)
+            else:
+                self.map[symbol] = scheme_object
+        else:
+            raise Exception("Either not a valid symbol or no scheme object given.")
+
+
+class SchemeContinuation(SchemeObject):
+    """
+        Whenever a function gets called or something else is evaluated,
+        a continuation is stored with the informations on where to proceed etc.
+    """
+    def __init__(self, parent_cont, env, func, ast, args):
+        self.parent_cont = parent_cont
+        self.environment = env
+        self.function = func
+        self.ast = ast
+        self.args = args
+        # ret_val is filled by called function if needed!
+        self.ret_val = None
+
+
+# Exceptions Used in this module:
+class BindingAlreadyExistingException(Exception):
+    """
+        The given symbol already had a binding.
+    """
+    def __init__(self, message, symbol):
+        super(BindingAlreadyExistingException, self).__init__(message)
+        self.content = symbol
+
+
+class NoBindingForSymbolException(Exception):
+    """
+        The given symbol already had a binding.
+    """
+    def __init__(self, message, symbol):
+        super(NoBindingForSymbolException, self).__init__(message)
+        self.content = symbol
