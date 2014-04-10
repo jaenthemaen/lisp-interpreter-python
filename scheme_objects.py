@@ -3,6 +3,8 @@ from collections import OrderedDict
 
 class SchemeObject(object):
     """ root object for all scheme objects """
+    def is_scheme_object(self):
+        return True
 
     def is_scheme_boolean(self):
         return False
@@ -41,6 +43,15 @@ class SchemeObject(object):
         return False
 
     def is_scheme_quote(self):
+        return False
+
+    def is_scheme_builtin(self):
+        return False
+
+    def is_scheme_lambda(self):
+        return False
+
+    def is_scheme_syntax(self):
         return False
 
 
@@ -94,10 +105,14 @@ class SchemeTrue(SchemeBoolean):
 class SchemeCons(SchemeObject):
     """ SchemeCons : Basic Tuple Data Structure """
 
-    def __init__(self, aCar, aCdr):
+    def __init__(self, car=None, cdr=None):
         super(SchemeCons, self).__init__()
-        self.car = aCar
-        self.cdr = aCdr
+        if car is None:
+            car = SchemeNil()
+        if cdr is None:
+            cdr = SchemeNil()
+        self.car = car
+        self.cdr = cdr
 
     def to_string(self):
         return '(' + self.car.to_string() + ' ' + self.cdr.to_string() + ')'
@@ -105,6 +120,13 @@ class SchemeCons(SchemeObject):
     def is_scheme_cons(self):
         return True
 
+    def list_length(self):
+        length = 0
+        current_cons = self
+        while current_cons.is_scheme_cons():
+            length += 1
+            current_cons = current_cons.cdr
+        return length
 
 class SchemeNumber(SchemeObject):
     """ Base class for integers and floats """
@@ -237,8 +259,8 @@ class SchemeEnvironment(SchemeObject):
         self.parent_env = parent_env
 
     def add_binding(self, symbol, scheme_object):
-        if symbol is not None and symbol != "" and type(scheme_object) == SchemeObject:
-            if self.map[symbol] is None:
+        if symbol is not None and symbol != "" and scheme_object.is_scheme_object():
+            if not symbol in self.map:
                 self.map[symbol] = scheme_object
             else:
                 return BindingAlreadyExistingException("Symbol already bound, no binding possible.", symbol)
@@ -271,17 +293,65 @@ class SchemeContinuation(SchemeObject):
         Whenever a function gets called or something else is evaluated,
         a continuation is stored with the informations on where to proceed etc.
     """
-    def __init__(self, parent_cont, env, func, ast, args):
+    def __init__(self, parent_cont, env, func, ast, args, ret_val, args_count=0):
         self.parent_cont = parent_cont
-        self.environment = env
+        #TODO use handed env or create new one with handed as parent?
+        # lambda und begin -> eigenes env
+        self.env = env
+        # python func
         self.function = func
+        # scheme ast
         self.ast = ast
+        # unevaled args as python list
         self.args = args
+        # evaled args count
+        self.evaled_args_count = args_count
+        # known in function. not here
+        # self.args_evaluated = False
         # ret_val is filled by called function if needed!
-        self.ret_val = None
+        # index im arguments array der uebergeordneten continuation
+        # dort return wert hinschreiben
+        self.ret_val = ret_val
+
+
+class SchemeBuiltin(SchemeObject):
+    """  """
+    def __init__(self, func, args_count):
+        self.args_count = args_count
+        self.func = func
+
+    def is_scheme_builtin(self):
+        return True
+
+
+# TODO check SchemeLambda
+class SchemeLambda(SchemeObject):
+    """ """
+    # TODO does env need to be linked here?
+    def __init__(self, args, body, env):
+        self.args = args
+        self.body = body
+        self.env = env
+
+    def is_scheme_lambda(self):
+        return True
+
+
+# TODO check SchemeSyntax
+class SchemeSyntax(SchemeObject):
+    """ """
+    # TODO does env need to be linked here?
+    def __init__(self, args, body, env):
+        self.args = args
+        self.body = body
+        self.env = env
+
+    def is_scheme_syntax(self):
+        return True
 
 
 # Exceptions Used in this module:
+#
 class BindingAlreadyExistingException(Exception):
     """
         The given symbol already had a binding.
@@ -293,7 +363,7 @@ class BindingAlreadyExistingException(Exception):
 
 class NoBindingForSymbolException(Exception):
     """
-        The given symbol already had a binding.
+        The requested symbol had no binding.
     """
     def __init__(self, message, symbol):
         super(NoBindingForSymbolException, self).__init__(message)

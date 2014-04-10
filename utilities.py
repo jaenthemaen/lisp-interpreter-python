@@ -2,6 +2,7 @@ class StringStream(object):
 
     def __init__(self, string_input=""):
         self.stream = string_input
+        self.preprocessed = False
 
     def skip_spaces(self):
         self.stream = self.stream.lstrip()
@@ -20,8 +21,10 @@ class StringStream(object):
         else:
             return None
 
-    def set_stream(self, string_input):
+    def set_stream(self, string_input, uncheck_preprocessed=False):
         self.stream = string_input
+        if uncheck_preprocessed:
+            self.preprocessed = False
 
     def get_stream(self):
         return self.stream

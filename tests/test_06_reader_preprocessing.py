@@ -9,12 +9,11 @@ class MalformedListsTestCase(unittest.TestCase):
 
     def setUp(self):
         self.stream = utilities.StringStream()
-        self.reader = reader.Reader()
 
     def test_misplaced_parenthesis(self):
         with self.assertRaises(readerEx.MalformedListException) as cm:
             self.stream.set_stream(')(')
-            self.reader.read_from_stream(self.stream)
+            reader.read_from_stream(self.stream)
 
         desired_exception = cm.exception
         self.assertTrue(isinstance(desired_exception, readerEx.MalformedListException))
@@ -22,7 +21,7 @@ class MalformedListsTestCase(unittest.TestCase):
     def test_misplaced_inner_parenthesis(self):
         with self.assertRaises(readerEx.MalformedListException) as cm:
             self.stream.set_stream('(()))')
-            self.reader.read_from_stream(self.stream)
+            reader.read_from_stream(self.stream)
 
         desired_exception = cm.exception
         self.assertTrue(isinstance(desired_exception, readerEx.MalformedListException))

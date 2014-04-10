@@ -7,28 +7,27 @@ class MyTestCase(unittest.TestCase):
 
     def setUp(self):
         self.stream = utilities.StringStream()
-        self.reader = reader.Reader()
 
     def test_empty_list(self):
         self.stream.set_stream('()')
-        result = self.reader.read_from_stream(self.stream)
+        result = reader.read_from_stream(self.stream)
         self.assertTrue(isinstance(result, SchemeNil))
 
     def test_empty_list_with_spaces(self):
         self.stream.set_stream('(         )')
-        result = self.reader.read_from_stream(self.stream)
+        result = reader.read_from_stream(self.stream)
         self.assertTrue(isinstance(result, SchemeNil))
 
     def test_list_with_single_item(self):
         self.stream.set_stream('(     10   )')
-        result = self.reader.read_from_stream(self.stream)
+        result = reader.read_from_stream(self.stream)
         self.assertFalse(isinstance(result, SchemeNil))
         self.assertTrue(isinstance(result, SchemeCons))
         self.assertTrue(isinstance(result.car, SchemeInteger))
 
     def test_list_with_two_items(self):
         self.stream.set_stream('(     10   123.4   )')
-        result = self.reader.read_from_stream(self.stream)
+        result = reader.read_from_stream(self.stream)
         self.assertFalse(isinstance(result, SchemeNil))
         self.assertTrue(isinstance(result, SchemeCons))
         self.assertTrue(isinstance(result.cdr, SchemeCons))

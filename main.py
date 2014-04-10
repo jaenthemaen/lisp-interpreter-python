@@ -1,36 +1,26 @@
-from evaluator import Evaluator
-from reader import Reader
-from printer import Printer
-from utilities import StringStream
+import evaluator, reader, printer, utilities
 
 def start():
     """ setting up the repl loop """
-
+    # load std lib
     init()
-
-    # setup needed objects:
-    scheme_reader = Reader()
-    scheme_evaluator = Evaluator()
-    scheme_printer = Printer()
 
     while True:
 
         input_string = raw_input('<scheme>: ')
 
         # create a stream object from string
-        read_stream = StringStream(input_string)
-        write_stream = StringStream()
+        read_stream = utilities.StringStream(input_string)
+        write_stream = utilities.StringStream()
 
         # retrieve parsed string as list from reader
-        scheme_obj = scheme_reader.read_from_stream(read_stream)
+        parsed_scheme = reader.read_from_stream(read_stream)
 
-        # hand list over to eval [skipped for now!]
-        # evaluated_list = scheme_evaluator.evaluate(parsed_list)
-
-        # print dat shite!
-        scheme_printer.print_scheme_object(scheme_obj, write_stream)
+        # hand list over to eval
+        evaluator.evaluate(parsed_scheme, write_stream)
 
         print write_stream.get_stream()
+
 
 
 def init():
