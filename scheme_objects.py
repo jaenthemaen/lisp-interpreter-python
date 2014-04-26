@@ -75,9 +75,11 @@ class SchemeFalse(SchemeBoolean):
             cls._instance = super(SchemeFalse, cls).__new__(cls, *args)
         return cls._instance
 
-    @staticmethod
-    def to_string(self):
-        return "#f"
+    def __str__(self):
+        return 'SFalse: ' + "#f"
+
+    def __repr__(self):
+        return 'SFalse: ' + "#f"
 
     @staticmethod
     def is_scheme_false(self):
@@ -93,9 +95,11 @@ class SchemeTrue(SchemeBoolean):
             cls._instance = super(SchemeTrue, cls).__new__(cls, *args)
         return cls._instance
 
-    @staticmethod
-    def to_string(self):
-        return "#t"
+    def __str__(self):
+        return 'STrue: ' + "#t"
+
+    def __repr__(self):
+        return 'STrue: ' + "#t"
 
     @staticmethod
     def is_scheme_true(self):
@@ -114,8 +118,12 @@ class SchemeCons(SchemeObject):
         self.car = car
         self.cdr = cdr
 
-    def to_string(self):
-        return '(' + self.car.to_string() + ' ' + self.cdr.to_string() + ')'
+    def __str__(self):
+        return "SCons: " + '(' + str(self.car) + ' ' + str(self.cdr) + ')'
+
+    def __repr__(self):
+        return "SCons: " + '(' + str(self.car) + ' ' + str(self.cdr) + ')'
+
 
     def is_scheme_cons(self):
         return True
@@ -128,6 +136,14 @@ class SchemeCons(SchemeObject):
             current_cons = current_cons.cdr
         return length
 
+    def get_nth_element(self, n):
+        current_cons = self
+        index = 0
+        while current_cons.is_scheme_cons() and index <= n:
+            index += 1
+            current_cons = current_cons.cdr
+        return current_cons
+
 class SchemeNumber(SchemeObject):
     """ Base class for integers and floats """
 
@@ -135,8 +151,8 @@ class SchemeNumber(SchemeObject):
         super(SchemeObject, self).__init__()
         self.value = num_value
 
-    def to_string(self):
-        return str(self.value)
+    def __str__(self):
+        return str(self.__class__) + ': ' + str(self.value)
 
     def is_scheme_number(self):
         return True
@@ -148,6 +164,12 @@ class SchemeFloat(SchemeNumber):
     def __init__(self, num_value):
         super(SchemeFloat, self).__init__(num_value)
 
+    def __str__(self):
+        return "SFloat: " + str(self.value)
+
+    def __repr__(self):
+        return "SFloat: " + str(self.value)
+
     def is_scheme_float(self):
         return True
 
@@ -157,6 +179,12 @@ class SchemeInteger(SchemeNumber):
 
     def __init__(self, num_value):
         super(SchemeInteger, self).__init__(num_value)
+
+    def __str__(self):
+        return "SInteger: " + str(self.value)
+
+    def __repr__(self):
+        return "SInteger: " + str(self.value)
 
     def is_scheme_integer(self):
         return True
@@ -171,6 +199,12 @@ class SchemeNil(SchemeObject):
             cls._instance = super(SchemeNil, cls).__new__(cls, *args)
         return cls._instance
 
+    def __str__(self):
+        return "SNil"
+
+    def __repr__(self):
+        return "SNil"
+
     def is_scheme_nil(self):
         return True
 
@@ -179,14 +213,14 @@ class SchemeQuote(SchemeObject):
     """
         Stores a Scheme Quote. Capsulates inner Objects that are already parsed.
     """
-    _content = None
+    content = None
 
     def __init__(self, content):
         super(SchemeQuote, self).__init__()
-        self._content = content
+        self.content = content
 
     def get_content(self):
-        return self._content
+        return self.content
 
     def is_scheme_quote(self):
         return True
@@ -199,8 +233,12 @@ class SchemeString(SchemeObject):
         super(SchemeString, self).__init__()
         self.content = string_content
 
-    def to_string(self):
-        return '"' + self.content + '"'
+    def __str__(self):
+        return 'SString: "' + str(self.content) + '"'
+
+    def __repr__(self):
+        return 'SString: "' + str(self.content) + '"'
+
 
     def is_scheme_string(self):
         return True
@@ -209,12 +247,15 @@ class SchemeString(SchemeObject):
 class SchemeSymbol(SchemeObject):
     """ all symbols and identifiers """
 
-    def __init__(self, aName):
+    def __init__(self, name):
         super(SchemeSymbol, self).__init__()
-        self.name = aName
+        self.name = name
 
-    def to_string(self):
-        return self.name
+    def __str__(self):
+        return "SSymbol: " + str(self.name)
+
+    def __repr__(self):
+        return "SSymbol: " + str(self.name)
 
     def is_scheme_symbol(self):
         return True
@@ -227,7 +268,7 @@ class SchemeUserDefinedFunction(SchemeObject):
         super(SchemeUserDefinedFunction, self).__init__()
         self.name = name
 
-    def to_string(self):
+    def __str__(self):
         return self.name
 
     def is_scheme_user_defined_function(self):
@@ -242,6 +283,12 @@ class SchemeVoid(SchemeObject):
         if not cls._instance:
             cls._instance = super(SchemeVoid, cls).__new__(cls, *args)
         return cls._instance
+
+    def __str__(self):
+        return "SVoid"
+
+    def __str__(self):
+        return "SVoid"
 
     def is_scheme_void(self):
         return True
@@ -293,25 +340,28 @@ class SchemeContinuation(SchemeObject):
         Whenever a function gets called or something else is evaluated,
         a continuation is stored with the informations on where to proceed etc.
     """
-    def __init__(self, parent_cont, env, func, ast, args, ret_val, args_count=0):
-        self.parent_cont = parent_cont
+    def __init__(self, pc, env, func, ast, args, ret_index, args_count=0):
+        self.pc = pc
         #TODO use handed env or create new one with handed as parent?
         # lambda und begin -> eigenes env
         self.env = env
         # python func
-        self.function = func
+        self.func = func
         # scheme ast
         self.ast = ast
         # unevaled args as python list
         self.args = args
         # evaled args count
-        self.evaled_args_count = args_count
+        self.args_count = args_count
         # known in function. not here
         # self.args_evaluated = False
         # ret_val is filled by called function if needed!
         # index im arguments array der uebergeordneten continuation
         # dort return wert hinschreiben
-        self.ret_val = ret_val
+        self.ret_index = ret_index
+
+    def __str__(self):
+        return str(self.__class__) + str(self.__dict__)
 
 
 class SchemeBuiltin(SchemeObject):

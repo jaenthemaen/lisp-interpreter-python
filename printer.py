@@ -23,14 +23,15 @@ def print_scheme_object(scheme_obj, stream):
         return
 
     if scheme_obj.is_scheme_false():
-        stream.write_chars('false')
+        stream.write_chars('#f')
         return
 
     if scheme_obj.is_scheme_true():
-        stream.write_chars('true')
+        stream.write_chars('#t')
         return
 
     if scheme_obj.is_scheme_quote():
+        stream.write_chars("'")
         return print_scheme_object(scheme_obj.get_content(), stream)
 
     if scheme_obj.is_scheme_void():

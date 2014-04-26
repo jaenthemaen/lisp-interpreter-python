@@ -1,7 +1,5 @@
-from scheme_objects import *
-from scheme_exceptions.evaluator_exceptions import *
+from scheme_objects import  SchemeObject, SchemeContinuation, SchemeEnvironment, SchemeVoid
 import printer
-# import utilities
 import scheme_builtins
 
 global_env = None
@@ -11,79 +9,55 @@ output_stream = None
 def evaluate(ast, out):
     global output_stream
     global global_env
-    output_stream = out
 
     if global_env is None:
         global_env = SchemeEnvironment(None)
         scheme_builtins.register_builtins(global_env)
-        # TODO std lib loading should be done here
+        # std lib loading should be done here
+    output_stream = out
 
-    print_cont = SchemeContinuation(None, None, print_result, None, [SchemeVoid()], None)
-    eval_cont = SchemeContinuation(print_cont, global_env, eval_top, ast, None, 0)
+    # 1. neue cinuation
+    print_c = SchemeContinuation(pc=None, env=None, func=print_result, ast=None, args=[None], ret_index=None)
+    eval_c = SchemeContinuation(pc=print_c, env=global_env, func=eval, ast=ast, args=None, ret_index=0)
 
-    current_cont = eval_cont
+    current_c = eval_c
 
-    while current_cont is not None:
-        current_cont = current_cont.function(current_cont)
+    while current_c is not None:
+        current_c = current_c.func(current_c)
 
 
-def eval_top(cont):
-    ast = cont.ast
+def eval(c):
+    # returns unevaled ast
+    ast = c.ast
     if ast.is_scheme_cons():
-        return SchemeContinuation(cont.parent_cont, cont.env, prepare_eval, ast, [None] * ast.cdr.list_length(), cont.ret_val)
+        return SchemeContinuation(pc=c.pc, env=c.env, func=eval_function, ast=c.ast,
+                                  args=[None] * c.ast.cdr.list_length(), ret_index=0)
     else:
-        cont.parent_cont.args[cont.ret_val] = cont.ast
+        c.pc.args[c.ret_index] = c.ast
 
-    return cont.parent_cont
-
-
-def eval_static(cont):
-    if cont.ast.isSchemeCons:
-        # evaluate car!
-        pass
-    elif cont.ast.isSchemeNumber:
-        cont.parent_cont.ret_val = cont.ast
-    return cont.parent_cont
+    return c.pc
 
 
-# TODO prepare function --> symbol lookup
-# muss cont bauen fuer eval_func und eval_args
-def prepare_eval(cont):
-    # lookup function definition
-    symbol = cont.ast.car
+def eval_function(c):
+    # TODO check for number of args
+    func = c.env.get_binding(c.ast.car.name)
+    curr = c.ast.cdr
+    arg_len = 0
+    while curr.is_scheme_cons():
+        c.args[arg_len] = curr.car
+        arg_len += 1
+        curr = curr.cdr
 
-    if symbol.is_scheme_symbol():
-        func = cont.env.get_binding(symbol.name)
-    else:
-        return SchemeContinuation(cont.parent_cont, cont.env, eval_static, cont.ast.car, cont.args, cont.evaled_args_count)
-
-    # TODO check if func is a function. if not... it is a list?
-    # for now it is the same.
-    if func.is_scheme_builtin() or func.is_scheme_lambda() or func.is_scheme_lambda():
-        # TODO is there a differentiatiion between lamda & builtin? lambda needs an env maybe?
-        # check if arguments count matches!
-        if func.args_count != 0 and func.args_count != cont.args.length:
-            raise ArgumentsCountNotMatchingException()
-
-        # now eval the args:
-        return SchemeContinuation(cont.parent_cont, cont.env, eval_args, cont.ast, cont.args, 0)
+    c.pc.args[c.ret_index] = func.func(c.args)
+    return c.pc
 
 
-def eval_function(cont):
-    func = cont.env.get_binding(cont.ast.car.name)
-    cont.parent_cont.args[cont.ret_val] = func.func(cont.args)
-    return cont.parent_cont
+def eval_args(c):
+    if c.args_count >= c.args.length:
+        return c.pc
 
 
-# TODO complete!
-def eval_args(cont):
-    if cont.evaled_args_count >= len(cont.args):
-        return SchemeContinuation(cont.parent_cont, cont.env, eval_function, cont.ast, cont.args, cont.evaled_args_count)
-    else:
-        return SchemeContinuation(cont.parent_cont, cont.env, eval_top, cont.ast.cdr, cont.args, cont.evaled_args_count)
-
-
-def print_result(cont):
+def print_result(c):
     global output_stream
-    printer.print_scheme_object(cont.args[0], output_stream)
+    printer.print_scheme_object(c.args[0], output_stream)
     return None

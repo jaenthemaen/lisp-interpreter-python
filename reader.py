@@ -38,6 +38,7 @@ def read_from_stream(stream):
 
     return read_symbol_from_stream(stream)
 
+
 def preprocess_stream_content(stream):
     paren_opened = False
     paren_opened_count = 0
@@ -105,6 +106,7 @@ def read_number_from_stream(stream):
     else:
         return SchemeInteger(int(value))
 
+
 def read_list_from_stream(stream):
 
     stream.skip_spaces()
@@ -118,6 +120,7 @@ def read_list_from_stream(stream):
         rest_list = read_list_from_stream(stream)
         return SchemeCons(element, rest_list)
 
+
 def read_symbol_from_stream(stream):
     symbol_name = ""
     pch = stream.peek_char()
@@ -128,6 +131,7 @@ def read_symbol_from_stream(stream):
         pch = stream.peek_char()
 
     return SchemeSymbol(symbol_name)
+
 
 def read_string_from_stream(stream):
     string_content = ""
