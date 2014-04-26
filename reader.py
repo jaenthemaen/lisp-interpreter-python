@@ -25,8 +25,8 @@ def read_from_stream(stream):
 
     if pch == "'":
         stream.read_char()
-        #TODO: Werden Quotes bereits hier erstellt?
-        return SchemeQuote(read_from_stream(stream))
+        return SchemeCons(SchemeSymbol('quote')
+                          , SchemeCons(read_from_stream(stream), SchemeNil()))
 
     if pch == "-":
         return read_number_from_stream(stream)
@@ -67,6 +67,7 @@ def preprocess_stream_content(stream):
     else:
         raise reader_ex.MalformedListException(
             "Parenthesis counts aren't matching! Opened:" + str(paren_opened_count) + ", Closed:" + str(paren_closed_count))
+
 
 def read_number_from_stream(stream):
     value = ""
