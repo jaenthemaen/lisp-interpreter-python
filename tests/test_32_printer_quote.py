@@ -2,12 +2,11 @@ import reader, printer, evaluator, utilities
 import unittest
 
 
-class PrinterQupteTestCase(unittest.TestCase):
+class PrinterQuoteTestCase(unittest.TestCase):
 
     def setUp(self):
         self.input_stream = utilities.StringStream()
         self.output_stream = utilities.StringStream()
-
 
     def test_unevaled_integer_quote(self):
         self.input_stream.set_stream("'10")

@@ -46,23 +46,32 @@ def print_scheme_object(scheme_obj, stream):
     # if no object type could be detected:
     raise Exception("Printer encountered unknown input string!" + str(scheme_obj))
 
+
 def print_scheme_list(scheme_obj, stream):
     stream.write_chars('(')
     print_scheme_rest_list(scheme_obj, stream)
+
 
 def print_scheme_rest_list(scheme_obj, stream):
     print_scheme_object(scheme_obj.car, stream)
     if scheme_obj.cdr.is_scheme_nil():
         stream.write_chars(')')
-    else:
+    elif scheme_obj.cdr.is_scheme_cons():
         stream.write_chars(' ')
         print_scheme_rest_list(scheme_obj.cdr, stream)
+    # malformed cons!
+    else:
+        stream.write_chars(' . ')
+        print_scheme_object(scheme_obj.cdr, stream)
+        stream.write_chars(')')
 
 def print_scheme_float(scheme_obj, stream):
     stream.write_chars(str(scheme_obj.value))
 
+
 def print_scheme_integer(scheme_obj, stream):
     stream.write_chars(str(scheme_obj.value))
+
 
 def print_scheme_string(scheme_obj, stream):
     stream.write_chars('"' + scheme_obj.content + '"')
